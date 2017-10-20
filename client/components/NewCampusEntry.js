@@ -1,20 +1,37 @@
 import React from 'react';
 import {connect} from 'react-redux';
-
+import store , { postCampus, postNewCampus  } from '../store'
 
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+        handleChange(evt){
+            dispatch(postNewCampus(evt.target.value))
+        },
+        handleSubmit(evt){
+            evt.preventDefault();
+            const newCampusName = evt.target.name.value;
+            dispatch(postCampus(newCampusName));
+        }
+    };
 }
 
 const mapStateToProps = (state) =>{
-    return {};
+    return {
+        newCampus: state.newCampu
+    };
 }
 
 const NewCampusEntry = (props) => {
     return (
         <div>
-            <h1> WOW! Everything below campus list is completely connected!</h1>
+            <form onSubmit={props.handleSubmit} className="create-new-campus">
+                <label>name</label>
+                <input name="name" type="name" className="new-campus-name"
+                    onChange={props.handleChange}
+                    value={props.newCampus} />
+                <button> create a new campus </button>
+            </form>
         </div>
     )
 }

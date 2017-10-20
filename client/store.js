@@ -8,9 +8,14 @@ const initialState = {
     campuses: [],
     newCampus: "",
     students: [],
+    updatedCampus: [],
     selectedStudent: [],
-    newStudent: "",
-    campusChangeName: ""
+    newStudentName: "",
+    newStudentEmail: "",
+    campusChangeName: "",
+    updatedStudent: []
+
+
 }
 
 // action types
@@ -18,12 +23,16 @@ const GET_CAMPUSES = "GET_CAMPUSES";
 const GET_A_CAMPUS = "GET_A_CAMPUS";
 const POST_NEW_CAMPUS = "POST_NEW_CAMPUS";
 const UPDATE_A_CAMPUS = "UPDATE_A_CAMPUS";
+const DELETE_A_CAMPUS = "DELETE_A_CAMPUS";
+const GET_UPDATED_CAMPUS = "GET_UPDATED_CAMPUS";
 
 const GET_STUDENTS = "GET_STUDENTS";
 const GET_A_STUDENT = "GET_A_STUDENT";
-const POST_NEW_STUDENT = "POST_NEW_STUDENT";
+const POST_NEW_STUDENT_NAME = "POST_NEW_STUDENT_Name";
+const POST_NEW_STUDENT_EMAIL = "POST_NEW_STUDENT_Email";
 const UPDATE_A_STUDENT = "UPDATE_A_STUDENT";
 const DELETE_A_STUDENT = "DELETE_A_STUDENT";
+const GET_UPDATED_STUDENT = "GET_UPDATED_STUDENT";
 
 
 // ACTION creators
@@ -48,6 +57,17 @@ export function updateACampus (updatedCampus) {
     return action;
 }
 
+export function getUpdatedCampus(updatedCampus){
+    const action = {type: GET_UPDATED_CAMPUS, updatedCampus};
+    return action;
+}
+
+export function deleteACampus (deletedCampusId) {
+    const action = {type: DELETE_A_CAMPUS, deletedCampusId };
+    return action;
+}
+
+
 export function getStudents (students) { 
     const action = { type: GET_STUDENTS, students };
     return action;
@@ -58,13 +78,23 @@ export function getAStudent (student) {
     return action;
 }
 
-export function postNewStudent (newStudent) { 
-    const action = { type: POST_NEW_STUDENT, newStudent };
+export function postNewStudentName (newStudentName) { 
+    const action = { type: POST_NEW_STUDENT_NAME, newStudentName };
+    return action;
+}
+
+export function postNewStudentEmail (newStudentEmail) { 
+    const action = { type: POST_NEW_STUDENT_EMAIL, newStudentEmail };
     return action;
 }
 
 export function updateAStudent (updatedStudent) { 
     const action = { type: UPDATE_A_STUDENT, updatedStudent };
+    return action;
+}
+
+export function getUpdatedStudent(updatedStudent){
+    const action = {type: GET_UPDATED_STUDENT, updatedStudent};
     return action;
 }
 
@@ -118,11 +148,23 @@ export function changeCampus(name, campusId){
         return axios.put(`/api/campuses/${campusId}`, {name: name})
         .then(res => res.data)
         .then(updatedCampus => {
-            const action = getACampus(updatedCampus);
+            const action = getUpdatedCampus(updatedCampus);
             dispatch(action);
         })
         .catch(err => console.error('UPDATE campus unsuccessful!!!!!', err))
         
+    }
+}
+
+export function deleteCampus(campusId){
+    return function thunk(dispatch){
+        return axios.delete(`/api/campuses/${campusId}`)
+        .then(res => res.data)
+        .then( (campuses) => { 
+            const action = getCampuses(campuses)
+            dispatch(action)
+        })
+        .catch(err => console.error('error in delete Campus: ', err))
     }
 }
 
@@ -152,9 +194,9 @@ export function fetchAStudent(studentId) {
     }
 }
 
-export function postStudent(student) {
+export function postStudent(name, email, campusId) {
     return function thunk(dispatch){
-        return axios.post('/api/students', student)
+        return axios.post('/api/students', {name: name, email: email, campusId: campusId})
         .then(res => res.data)
         .then(newStudent => {
             const action =getAStudent(newStudent);
@@ -171,8 +213,25 @@ export function changeStudent(studentId, campusId){
         return axios.put(`/api/students/${studentId}`, {campusId : campusId})
         .then(res => res.data)
         .then(updatedStudent => {
-            console.log("updatedStudent", updatedStudent)
             const action = getAStudent(updatedStudent);
+            dispatch(action);
+        })
+        .catch(err => console.error('UPDATE student unsuccessful!!!!!', err))
+        
+    }
+}
+
+export function updateStudent(studentId, name, email, campusId){
+    return function thunk(dispatch){
+        return axios.put(`/api/students/${studentId}`, {
+            name: name,
+            email:email,
+            campusId : campusId})
+        .then(res => res.data)
+        .then(updatedStudent => {
+            console.log("aoooo you caught me")
+            console.log(updatedStudent);
+            const action = getUpdatedStudent(updatedStudent);
             dispatch(action);
         })
         .catch(err => console.error('UPDATE student unsuccessful!!!!!', err))
@@ -183,8 +242,9 @@ export function changeStudent(studentId, campusId){
 export function deleteStudent(studentId){
     return function thunk(dispatch){
         return axios.delete(`/api/students/${studentId}`)
-        .then( () => { 
-            const action = deleteAStudent(studentId)
+        .then(res => res.data)
+        .then( (students) => { 
+            const action = getStudents(students)
             dispatch(action)
         })
         .catch(err => console.error('error in delete student: ', err))
@@ -206,15 +266,25 @@ function reducer (state = initialState, action){
         case UPDATE_A_CAMPUS:
         return Object.assign({}, state, { campusChangeName:  action.updatedCampus});
 
+        case GET_UPDATED_CAMPUS:
+        return Object.assign({}, state, {updatedCampus : action.updatedCampus })
+
+        case DELETE_A_CAMPUS:
+        return Object.assign({}, state, { campuses: state.campuses.filter( campus => campus.id !== action.deletedCampusId) })
+        
         case GET_STUDENTS:
         return Object.assign({}, state, { students: action.students });
 
         case GET_A_STUDENT:
-        return Object.assign({}, state, { students: state.students.concat(action.student) });
+        return Object.assign({}, state, { students : state.students.map(student => (
+            action.student.id === student.id ? action.student : student))});
 
-        case POST_NEW_STUDENT:
-        return Object.assign({}, state, { newStudent: action.newStudent });
+        case POST_NEW_STUDENT_NAME:
+        return Object.assign({}, state, { newStudentName: action.newStudentName });
 
+        case POST_NEW_STUDENT_EMAIL:
+        return Object.assign({}, state, { newStudentEmail: action.newStudentEmail });
+        
         case UPDATE_A_STUDENT:
         return Object.assign({}, state, { students : state.students.map(student => (
             action.updatedStudent.id === student.id ? action.updatedStudent : student))})
@@ -222,6 +292,10 @@ function reducer (state = initialState, action){
         case DELETE_A_STUDENT:
         return Object.assign({}, state, { students: state.students.filter( student => student.id !== action.deletedStudentId) })
         
+        case GET_UPDATED_STUDENT:
+        return Object.assign({}, state, {updatedStudent: action.updatedStudent})
+
+
         default:
         return state
     }

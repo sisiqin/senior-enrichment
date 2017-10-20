@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Campus = require('../db/models/campus')
+const Student = require('../db/models/student')
 
 module.exports = router;
 
@@ -42,8 +43,19 @@ router.put('/:id', (req, res, next) => {
 
 
 router.delete('/:id', (req, res, next) => {
-    Campus.findById(req.params.id)
-    .then(campus => campus.destroy())
-    .then( () => res.status(204).end())
+    Student.update(
+        {campusId: 1},
+        { fields: ['campusId'],
+        where: {campusId : req.params.id}})
+    .then( () => {
+        return Campus.findById(req.params.id)
+        .then(campus => campus.destroy()
+        .then( () => {
+            return Campus.findAll()
+            .then(campuses => {
+            res.json(campuses)})
+        })
+        )
+    })
     .catch(next)
 })

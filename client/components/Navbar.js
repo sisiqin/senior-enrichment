@@ -18,11 +18,9 @@ const mapStateToProps = (state) =>{
 const Nabar = (props) => {
     return (
         <div>
-        <NavLink to={"/campuses"}> Campuses </NavLink>
-        <span> &emsp; </span>
-        <NavLink to={"/students"}> Students </NavLink>
-            
-            <StudentList />
+            <NavLink to={"/campuses"}> Campuses </NavLink>
+            <span> &emsp; </span>
+            <NavLink to={"/students"}> Students </NavLink>
         </div>
     )
 }

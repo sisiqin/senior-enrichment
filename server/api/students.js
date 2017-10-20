@@ -26,10 +26,14 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     const newCampusId = req.body.campusId;
     const studentId = req.params.id;
+    const newName = req.body.name;
+    const newEmail = req.body.email;
     Student.findById(studentId)
     .then(student => {
         student.campusId = newCampusId;
-        student.save({fileds:['campusId']}) 
+        student.name = newName || student.name;
+        student.email = newEmail || student.email;
+        student.save({fileds:['campusId', 'name', 'email']}) 
     .then(() => {
         return Student.findById(studentId)
         .then(student => {
@@ -41,7 +45,12 @@ router.put('/:id', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
     Student.findById(req.params.id)
-    .then(student => student.destroy())
-    .then( () => res.status(204).end())
+    .then(student => student.destroy()
+    .then( () => {
+        return Student.findAll()
+    .then(students => {
+        res.json(students)})
+    })
+    )
     .catch(next)
 })
