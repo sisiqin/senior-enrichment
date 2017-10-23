@@ -22,6 +22,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 evt.preventDefault();
                 const newName = evt.target.changeCampusName.value;
                 dispatch(changeCampus(newName, campusId));
+                dispatch(updateACampus(""));
             }
         }
     } else{
@@ -56,13 +57,15 @@ const CampusStudents = (props) => {
         
         return (
             <div>
-            <span>This is Campus : {thisCampus()}</span>
+            <p>This is Campus : {thisCampus()}</p>
             <form onSubmit={props.formNameChange}>
                 <label> Change Campus Name </label>
                 <input name="changeCampusName" onChange={props.inputChangeName}
                         value={props.newName}/>
                         <button> Do it! </button>
             </form>
+            <p> <font size="4" > We have so many kids in this campus! They are: </font> </p> 
+            
                 <ul className='filteredStudents'>
                     {
                         filteredStudents.map(student => {
@@ -77,8 +80,7 @@ const CampusStudents = (props) => {
                             )
                         })
                     }
-                    <div> &emsp; </div>
-                    <span> Add New Students </span>
+                    <label> Add New Students </label>
                 
                     <select onChange={props.handleSelect}> 
                     {

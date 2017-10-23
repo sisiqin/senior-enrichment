@@ -25,15 +25,17 @@ const CampusList = (props) => {
         const keepDefault = () => { campus.id === 1 ? true : false }
     return (
         <div>
-      <ul>
+        <ul>
         {
             props.campuses.map(campus => {
                 return(
-                    <li key={campus.id}>
+                    <li key={campus.id} className="campus-std-list campus-list">
                         <NavLink to={`/campuses/${campus.id}`} >
-                        <span> {campus.name} </span>
-                        </NavLink>
-                        <button value={campus.id} onClick={props.handleDelete} disabled={ campus.id === 1 }> x </button>                                                
+                            <p> {campus.name}
+                            </p>
+                            </NavLink>
+                            <img src="http://www.orgsync.com/assets/what-is-orgsync/overview/icon-structure-ec2fbc6ec461f1fe4d52f88e4d25226d.png" />
+                            <p> <button className="remove-btn" value={campus.id} onClick={props.handleDelete} disabled={ campus.id === 1 }> x </button>  </p>                        
                     </li>
                 )
             })

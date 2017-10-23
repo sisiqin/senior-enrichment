@@ -18,6 +18,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             const email = evt.target.email.value;
             const campusId = evt.target.campus.value;
             dispatch(postStudent(name, email, campusId));  
+            // dispatch(postNewStudentName(""));
+            // dispatch(postNewStudentEmail(""));
         }
     };
 }
@@ -33,28 +35,34 @@ const mapStateToProps = (state) =>{
 const NewStudentEntry = (props) => {
     if(props.campuses) {
     return (
-        <div>
-            <h1> now let's create a new KID!</h1>
+        <div className="new-std-container">
+            <h3>  Now let's add a new KID!  </h3>         
             <form onSubmit={props.handleSubmit} className="add-new-student">
-            <label>name</label>
+            <label>Name</label>
             <input name="name" type="name" className="new-campus-name"
                 placeholder="name"
                 onChange={props.changeNameField}
                 value={props.newStudentName} />
-            <label> email </label>
+                                      
+                
+            <label> Email </label>
             <input name="email" type="email" className="new-campus-name"
                 onChange={props.changeEmailField}
                 placeholder="email"
                 value={props.newStudentEmail} />
-            <label> campus </label>
-            <select name="campus">
+                                      
+                
+            <label> Campus </label>
+            <select name="campus" className="custom-select">
+            <option defaultValue="campus">Campus...</option>
+            
             {   
                 props.campuses.map( campus => {
                   return  <option key={campus.id} value={campus.id}> {campus.name} </option>
                 })
             }
             </select>
-            <button> add a new student </button>
+            <button className="add-btn"> o </button>
         </form>
 
         </div>

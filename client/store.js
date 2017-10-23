@@ -229,7 +229,6 @@ export function updateStudent(studentId, name, email, campusId){
             campusId : campusId})
         .then(res => res.data)
         .then(updatedStudent => {
-            console.log("aoooo you caught me")
             console.log(updatedStudent);
             const action = getUpdatedStudent(updatedStudent);
             dispatch(action);
@@ -276,8 +275,11 @@ function reducer (state = initialState, action){
         return Object.assign({}, state, { students: action.students });
 
         case GET_A_STUDENT:
-        return Object.assign({}, state, { students : state.students.map(student => (
-            action.student.id === student.id ? action.student : student))});
+        return Object.assign({}, state, { students: state.students.concat(action.student) });
+
+        // case GET_A_STUDENT:
+        // return Object.assign({}, state, { students : state.students.map(student => (
+        //     action.student.id === student.id ? action.student : student))});
 
         case POST_NEW_STUDENT_NAME:
         return Object.assign({}, state, { newStudentName: action.newStudentName });

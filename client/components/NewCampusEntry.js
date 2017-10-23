@@ -12,29 +12,36 @@ const mapDispatchToProps = (dispatch) => {
             evt.preventDefault();
             const newCampusName = evt.target.name.value;
             dispatch(postCampus(newCampusName));
+            dispatch(postNewCampus(""));
         }
     };
 }
 
 const mapStateToProps = (state) =>{
     return {
-        newCampus: state.newCampu
+        newCampus: state.newCampus
     };
 }
 
 const NewCampusEntry = (props) => {
     return (
-        <div>
+        <div className="new-campus-container">
+        <h3>  Now let's create a new campus!  </h3>                     
             <form onSubmit={props.handleSubmit} className="create-new-campus">
-                <label>name</label>
-                <input name="name" type="name" className="new-campus-name"
+                <label>Name</label>
+                <input name="name" type="text"
+                    placeholder="Campus Name"
                     onChange={props.handleChange}
-                    value={props.newCampus} />
-                <button> create a new campus </button>
+                    value={props.newCampus} />              
+                    <button className="add-btn"> o </button>
             </form>
         </div>
     )
 }
+
+
+
+
 
 
 
