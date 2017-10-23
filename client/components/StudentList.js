@@ -28,7 +28,8 @@ const StudentList = (props) => {
         
         return (
             <div className="std-list-container">
-            <ul>
+            <h1 className="welcome-text"> Welcome to our Campus! </h1>            
+            <ul className="ul-for-campus">
             { props.allStudents.map( student => {
                 const rightCampus = props.allCampuses.filter( campus => campus.id === student.campusId)
                     return (

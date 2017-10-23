@@ -39,39 +39,37 @@ const SingleStudent = (props) => {
             if(props.updatedStudent.length === 0){
                 return props.allStudents.filter(student => student.id === studentId)[0]
             } else{
-                console.log("array or object???", props.updatedStudent)
                 return props.updatedStudent
             }
         } 
         let thisStudent = getStudent();
         const rightCampus = props.allCampuses.filter( campus => campus.id === thisStudent.campusId)[0]
         return (
-            <div> 
+            <div className="single-std-container"> 
+            <img src="https://cdn1.iconfinder.com/data/icons/education-1-15/151/1-512.png" />
             <form onSubmit={props.handleSubmit} className="create-new-campus">
                 
-                    <label>My name is: {thisStudent.name}</label>
+                    <p className="single-std-p">My name is {thisStudent.name} </p>
                     <input name="name" type="name" className="new-campus-name"
                         onChange={props.changeNameField}
                         value={props.newStudentName || thisStudent.name} />
-                    <button> Change name </button>
+                    <button className="btn btn-info"> Change name </button>
                     
-                    <div> &emsp; </div>
                     
-                    <label>My email is:  {thisStudent.email}</label>
+                    <p className="single-std-p">My email is  {thisStudent.email}</p>
                     <input name="email" type="email" className="new-campus-name"
                         onChange={props.changeEmailField}
                         value={props.newStudentEmail || thisStudent.email} />
-                    <button> Change Email </button>
+                    <button className="btn btn-info"> Change Email </button>
                 
-                    <div> &emsp; </div>
                     
-                    <label>I am in {rightCampus.name}</label>
-                    <select name="campus">
+                    <p className="single-std-p">I am in {rightCampus.name}</p>
+                    <select name="campus" className="form-control">
                         {props.allCampuses.map(campus => {
                             return <option key={campus.id} value={campus.id}> {campus.name} </option>
                         })}
                    </select>
-                    <button> Change Campus </button>
+                   <button className="btn btn-info"> Change Campus </button>
                
             </form> 
             </div>

@@ -25,7 +25,9 @@ const CampusList = (props) => {
         const keepDefault = () => { campus.id === 1 ? true : false }
     return (
         <div>
-        <ul>
+        <h1 className="welcome-text"> Welcome to our Campus! </h1>                    
+        <ul className="ul-for-campus">
+
         {
             props.campuses.map(campus => {
                 return(

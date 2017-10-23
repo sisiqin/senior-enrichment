@@ -56,33 +56,33 @@ const CampusStudents = (props) => {
         }
         
         return (
-            <div>
-            <p>This is Campus : {thisCampus()}</p>
-            <form onSubmit={props.formNameChange}>
+            <div className="campus-student-container">
+            <h3>This is Campus : {thisCampus()}</h3>
+            <form onSubmit={props.formNameChange} className="campus-changename-form">
                 <label> Change Campus Name </label>
                 <input name="changeCampusName" onChange={props.inputChangeName}
                         value={props.newName}/>
-                        <button> Do it! </button>
+                        <button className="add-btn"> o </button>
             </form>
-            <p> <font size="4" > We have so many kids in this campus! They are: </font> </p> 
+            <h3>  We have so many kids in this campus! They are: </h3> 
             
                 <ul className='filteredStudents'>
                     {
                         filteredStudents.map(student => {
                             return (
-                            <li key={student.id}>
+                            <li key={student.id} className="campus-std-list">
                                 <span>{student.name}</span>
                                 <span> &emsp; </span>                        
                                 <span>{student.email} </span>
                                 <span> &emsp; </span>
-                                <button value= {student.id} onClick={props.handleDelete}> x </button>
+                                <button className="remove-btn" value={student.id} onClick={props.handleDelete}> x </button>
                             </li>
                             )
                         })
                     }
                     <label> Add New Students </label>
                 
-                    <select onChange={props.handleSelect}> 
+                    <select onChange={props.handleSelect} className="form-control"> 
                     {
                         allStudents.map( student => {
                             return (

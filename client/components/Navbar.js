@@ -24,7 +24,6 @@ const Nabar = (props) => {
                     <li className="active" role="presentation"> <NavLink to={"/students"}> Students  </NavLink> </li>
                 </ul>
             </nav>
-            <h1 className="welcome-text"> Welcome to our Campus! </h1>
         </div>
     )
 }
